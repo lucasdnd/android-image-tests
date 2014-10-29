@@ -22,18 +22,18 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 12;	// try min 8
+	int size = 12; // try min 8
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
 
 	public CameraPreview(Context context, Camera camera, FrameLayout view) {
-		
+
 		super(context);
-		
+
 		mCamera = camera;
 		this.view = view;
-		
+
 		// Add the Surface callback
 		mHolder = getHolder();
 		mHolder.addCallback(this);
@@ -42,27 +42,27 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 		this.setWillNotDraw(false);
 
 	}
-	
+
 	private void startSurface(SurfaceHolder holder) throws Exception {
-		
+
 		mCamera.setPreviewDisplay(holder);
 		mCamera.setDisplayOrientation(90);
-		
+
 		Camera.Parameters parameters = mCamera.getParameters();
 		List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
-		
+
 		parameters.setPreviewSize(800, 480);
 		mCamera.setParameters(parameters);
-		
+
 		mCamera.startPreview();
 		mCamera.setPreviewCallback(this);
-		
+
 		previewSize = mCamera.getParameters().getPreviewSize();
 		pixels = new int[previewSize.width * previewSize.height];
 	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
-		
+
 		// The Surface has been created, now tell the camera where to draw the preview.
 		try {
 			startSurface(holder);
@@ -72,9 +72,9 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		if(mCamera != null) {
+		if (mCamera != null) {
 			mCamera.release();
-            mCamera = null;
+			mCamera = null;
 		}
 	}
 
@@ -142,22 +142,22 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 			}
 		}
 	}
-	
+
 	@Override
 	public void draw(Canvas canvas) {
 		super.draw(canvas);
-		
-//		System.out.println("canvas width = " + canvas.getWidth());
-//		System.out.println("canvas height = " + canvas.getHeight());
-//		System.out.println("preview width = " + previewSize.width);
-//		System.out.println("preview height = " + previewSize.height);
-		
+
+		// System.out.println("canvas width = " + canvas.getWidth());
+		// System.out.println("canvas height = " + canvas.getHeight());
+		// System.out.println("preview width = " + previewSize.width);
+		// System.out.println("preview height = " + previewSize.height);
+
 		canvas.rotate(90f, 400f, 240f);
 		canvas.translate(160f, -80f);
 		canvas.scale(1.5f, 1.5f);
-		
+
 		for (int i = 0; i < previewSize.width; i += size) {
-			for(int j = 0; j < previewSize.height; j += size) {
+			for (int j = 0; j < previewSize.height; j += size) {
 				int k = 800 * j + i;
 				if (k < pixels.length) {
 					paint.setColor(pixels[k]);
