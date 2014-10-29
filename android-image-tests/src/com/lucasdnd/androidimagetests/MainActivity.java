@@ -36,32 +36,33 @@ public class MainActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		// Orientation detector
 		SensorManager sensorManager = (SensorManager) this.getSystemService(Context.SENSOR_SERVICE);
-	    sensorManager.registerListener(new SensorEventListener() {
-	        int orientation=-1;;
+		sensorManager.registerListener(new SensorEventListener() {
+			int orientation = -1;
 
-	        @Override
-	        public void onSensorChanged(SensorEvent event) {
-	            if (event.values[1]<6.5 && event.values[1]>-6.5) {
-	                if (orientation!=1) {
-	                	isLandscape = true;
-	                }
-	                orientation=1;
-	            } else {
-	                if (orientation!=0) {
-	                	isLandscape = false;
-	                }
-	                orientation=0;
-	            }
-	        }
+			@Override
+			public void onSensorChanged(SensorEvent event) {
+				if (event.values[1] < 6.5 && event.values[1] > -6.5) {
+					if (orientation != 1) {
+						isLandscape = true;
+					}
+					orientation = 1;
+				} else {
+					if (orientation != 0) {
+						isLandscape = false;
+					}
+					orientation = 0;
+				}
+			}
 
-	        @Override
-	        public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-	        
-	    }, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-		
+			@Override
+			public void onAccuracyChanged(Sensor sensor, int accuracy) {
+			}
+
+		}, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+
 		// Create an instance of Camera
 		mCamera = getCameraInstance();
 
@@ -86,18 +87,18 @@ public class MainActivity extends Activity {
 				bitmap = Bitmap.createBitmap(v1.getDrawingCache());
 
 				// Rotate if necessary
-				if(isLandscape) {
+				if (isLandscape) {
 					Matrix matrix = new Matrix();
 					matrix.postRotate(90f);
-					Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap , 0, 0, bitmap .getWidth(), bitmap .getHeight(), matrix, true);
-			        bitmap = rotatedBitmap;
+					Bitmap rotatedBitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+					bitmap = rotatedBitmap;
 				}
-				
+
 				v1.setDrawingCacheEnabled(false);
-				
-		        // Save!
+
+				// Save!
 				try {
-					
+
 					OutputStream fout = null;
 					File file = File.createTempFile("pixelated_" + System.currentTimeMillis(), ".jpg", storageDir);
 
@@ -111,7 +112,7 @@ public class MainActivity extends Activity {
 					Uri contentUri = Uri.fromFile(f);
 					mediaScanIntent.setData(contentUri);
 					sendBroadcast(mediaScanIntent);
-					
+
 					// Take picture animation
 					ObjectAnimator backgroundColorAnimator = ObjectAnimator.ofObject(overlayView, "backgroundColor", new ArgbEvaluator(), 0xFFFFFFFF,
 							0x00FFFFFF);
@@ -139,17 +140,17 @@ public class MainActivity extends Activity {
 		}
 		return c;
 	}
-	
+
 	@Override
-    protected void onPause() {
-        super.onPause();
-        releaseCamera();
-    }
-	
+	protected void onPause() {
+		super.onPause();
+		releaseCamera();
+	}
+
 	private void releaseCamera() {
-        if (mCamera != null){
-            mCamera.release();
-            mCamera = null;
-        }
-    }
+		if (mCamera != null) {
+			mCamera.release();
+			mCamera = null;
+		}
+	}
 }
