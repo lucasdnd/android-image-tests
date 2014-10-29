@@ -1,6 +1,5 @@
 package com.lucasdnd.androidimagetests;
 
-import java.io.IOException;
 import java.util.List;
 import java.util.Random;
 
@@ -11,21 +10,19 @@ import android.graphics.Paint;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
 import android.hardware.Camera.Size;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.widget.FrameLayout;
 
 class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, PreviewCallback {
 
-	private final String TAG = "Exception";
 	private SurfaceHolder mHolder;
 	private Camera mCamera;
 	private FrameLayout view;
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 12;
+	int size = 12;	// try min 8
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
