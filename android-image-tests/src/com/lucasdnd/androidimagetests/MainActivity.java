@@ -3,8 +3,6 @@ package com.lucasdnd.androidimagetests;
 import android.app.Activity;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.widget.FrameLayout;
 
 public class MainActivity extends Activity {
@@ -30,11 +28,11 @@ public class MainActivity extends Activity {
 	public static Camera getCameraInstance(){
 	    Camera c = null;
 	    try {
-	        c = Camera.open(); // attempt to get a Camera instance
+	        c = Camera.open();
 	    }
 	    catch (Exception e){
-	        // Camera is not available (in use or does not exist)
+	        e.printStackTrace();
 	    }
-	    return c; // returns null if camera is unavailable
+	    return c;
 	}
 }

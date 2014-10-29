@@ -25,14 +25,10 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 8;
+	int size = 12;
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
-	
-	// Other stuff
-	final int logSlowdown = 4;
-	int currentLogSlowdown = 0;
 
 	public CameraPreview(Context context, Camera camera, FrameLayout view) {
 		super(context);
@@ -61,7 +57,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 			
 			Camera.Parameters parameters = mCamera.getParameters();
 			
-			// List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
+			List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
 			parameters.setPreviewSize(800, 480);
 			mCamera.setParameters(parameters);
 			
@@ -112,12 +108,8 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	@Override
 	public void onPreviewFrame(byte[] data, Camera camera) {
-		if(currentLogSlowdown % logSlowdown == 0) {
-			decodeYUV420SP(pixels, data, previewSize.width, previewSize.height);
-//			Log.i("Pixels", "The top right pixel has the following RGB (hexadecimal) values:" + Integer.toHexString(pixels[0]));
-			this.invalidate();
-		}
-		currentLogSlowdown++;
+		decodeYUV420SP(pixels, data, previewSize.width, previewSize.height);
+		this.invalidate();
 	}
 
 	void decodeYUV420SP(int[] rgb, byte[] yuv420sp, int width, int height) {
