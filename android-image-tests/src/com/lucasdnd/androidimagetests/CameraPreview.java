@@ -22,7 +22,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 12; // try min 8
+	int size = 10; // try min 8
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
@@ -155,11 +155,8 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 		for (int i = 0; i < previewSize.width; i += size) {
 			for (int j = 0; j < previewSize.height; j += size) {
-				int k = previewSize.width * j + i;
-				if (k < pixels.length) {
-					paint.setColor(pixels[k]);
-					canvas.drawRect(i, j, i + size, j + size, paint);
-				}
+				paint.setColor(pixels[previewSize.width * j + i]);
+				canvas.drawRect(i, j, i + size, j + size, paint);
 			}
 		}
 	}
