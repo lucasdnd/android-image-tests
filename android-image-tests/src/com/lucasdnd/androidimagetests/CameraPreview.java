@@ -6,7 +6,6 @@ import java.util.Random;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -73,10 +72,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		if (mCamera != null) {
-			mCamera.release();
-			mCamera = null;
-		}
+
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
@@ -152,7 +148,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 		// System.out.println("canvas height = " + canvas.getHeight());
 		// System.out.println("preview width = " + previewSize.width);
 		// System.out.println("preview height = " + previewSize.height);
-		
+
 		canvas.translate(0f, canvas.getHeight() / 2f - previewSize.height / 2f);
 		canvas.rotate(90f, previewSize.width / 2f, previewSize.height / 2f);
 		canvas.scale(1.7f, 1.7f, previewSize.width / 2f, previewSize.height / 2f);

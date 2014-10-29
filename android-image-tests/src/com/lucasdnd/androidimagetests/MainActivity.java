@@ -149,6 +149,8 @@ public class MainActivity extends Activity {
 
 	private void releaseCamera() {
 		if (mCamera != null) {
+			mCamera.setPreviewCallback(null);
+			mPreview.getHolder().removeCallback(mPreview);
 			mCamera.release();
 			mCamera = null;
 		}
