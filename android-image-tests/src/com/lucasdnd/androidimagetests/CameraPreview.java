@@ -6,6 +6,7 @@ import java.util.Random;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.hardware.Camera;
 import android.hardware.Camera.PreviewCallback;
@@ -51,7 +52,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 		Camera.Parameters parameters = mCamera.getParameters();
 		List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
 
-		parameters.setPreviewSize(800, 480);
+		parameters.setPreviewSize(previewSizes.get(3).width, previewSizes.get(3).height);
 		mCamera.setParameters(parameters);
 
 		mCamera.startPreview();
@@ -151,14 +152,14 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 		// System.out.println("canvas height = " + canvas.getHeight());
 		// System.out.println("preview width = " + previewSize.width);
 		// System.out.println("preview height = " + previewSize.height);
-
-		canvas.rotate(90f, 400f, 240f);
-		canvas.translate(160f, -80f);
-		canvas.scale(1.5f, 1.5f);
+		
+		canvas.translate(0f, canvas.getHeight() / 2f - previewSize.height / 2f);
+		canvas.rotate(90f, previewSize.width / 2f, previewSize.height / 2f);
+		canvas.scale(1.7f, 1.7f, previewSize.width / 2f, previewSize.height / 2f);
 
 		for (int i = 0; i < previewSize.width; i += size) {
 			for (int j = 0; j < previewSize.height; j += size) {
-				int k = 800 * j + i;
+				int k = previewSize.width * j + i;
 				if (k < pixels.length) {
 					paint.setColor(pixels[k]);
 					canvas.drawRect(i, j, i + size, j + size, paint);
