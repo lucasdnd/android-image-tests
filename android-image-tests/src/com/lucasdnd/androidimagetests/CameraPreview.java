@@ -25,7 +25,7 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 12;
+	int size = 10;
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
