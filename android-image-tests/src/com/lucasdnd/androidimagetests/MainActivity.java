@@ -143,8 +143,16 @@ public class MainActivity extends Activity {
 		return c;
 	}
 	
-//	@Override
-//	public void onOrientationChanged(int orientation) {
-//		
-//	}
+	@Override
+    protected void onPause() {
+        super.onPause();
+        releaseCamera();
+    }
+	
+	private void releaseCamera(){
+        if (mCamera != null){
+            mCamera.release();
+            mCamera = null;
+        }
+    }
 }
