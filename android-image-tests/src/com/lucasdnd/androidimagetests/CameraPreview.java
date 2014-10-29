@@ -25,84 +25,80 @@ class CameraPreview extends SurfaceView implements SurfaceHolder.Callback, Previ
 
 	// Stuff
 	Paint paint = new Paint(Color.RED);
-	int size = 10;
+	int size = 12;
 	private int[] pixels;
 	Size previewSize;
 	Random r = new Random();
 
 	public CameraPreview(Context context, Camera camera, FrameLayout view) {
-		super(context);
-
-		mCamera = camera;
 		
+		super(context);
+		
+		mCamera = camera;
 		this.view = view;
-
-		// Install a SurfaceHolder.Callback so we get notified when the
-		// underlying surface is created and destroyed.
+		
+		// Add the Surface callback
 		mHolder = getHolder();
 		mHolder.addCallback(this);
-		// deprecated setting, but required on Android versions prior to 3.0
-		mHolder.setType(SurfaceHolder.SURFACE_TYPE_PUSH_BUFFERS);
 
 		// So we can override the draw method
 		this.setWillNotDraw(false);
 
 	}
+	
+	private void startSurface(SurfaceHolder holder) throws Exception {
+		
+		mCamera.setPreviewDisplay(holder);
+		mCamera.setDisplayOrientation(90);
+		
+		Camera.Parameters parameters = mCamera.getParameters();
+		List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
+		
+		parameters.setPreviewSize(800, 480);
+		mCamera.setParameters(parameters);
+		
+		mCamera.startPreview();
+		mCamera.setPreviewCallback(this);
+		
+		previewSize = mCamera.getParameters().getPreviewSize();
+		pixels = new int[previewSize.width * previewSize.height];
+	}
 
 	public void surfaceCreated(SurfaceHolder holder) {
+		
 		// The Surface has been created, now tell the camera where to draw the preview.
 		try {
-			mCamera.setPreviewDisplay(holder);
-			mCamera.setDisplayOrientation(90);
-			
-			Camera.Parameters parameters = mCamera.getParameters();
-			
-			List<Camera.Size> previewSizes = parameters.getSupportedPreviewSizes(); // use this to check which preview sizes you device allows
-			parameters.setPreviewSize(800, 480);
-			mCamera.setParameters(parameters);
-			
-			mCamera.startPreview();
-			mCamera.setPreviewCallback(this);
-			
-			previewSize = mCamera.getParameters().getPreviewSize();
-			pixels = new int[previewSize.width * previewSize.height];
-		
-		} catch (IOException e) {
-			Log.d(TAG, "Error setting camera preview: " + e.getMessage());
+			startSurface(holder);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	public void surfaceDestroyed(SurfaceHolder holder) {
-		// empty. Take care of releasing the Camera preview in your activity.
+		if(mCamera != null) {
+			mCamera.release();
+            mCamera = null;
+		}
 	}
 
 	public void surfaceChanged(SurfaceHolder holder, int format, int w, int h) {
-		// If your preview can change or rotate, take care of those events here.
-		// Make sure to stop the preview before resizing or reformatting it.
 
 		if (mHolder.getSurface() == null) {
-			// preview surface does not exist
 			return;
 		}
 
-		// stop preview before making changes
+		// Stop preview before making changes
 		try {
 			mCamera.stopPreview();
 		} catch (Exception e) {
-			// ignore: tried to stop a non-existent preview
+			e.printStackTrace();
 		}
 
-		// set preview size and make any resize, rotate or
-		// reformatting changes here
-
-		// start preview with new settings
+		// Start preview
 		try {
-			mCamera.setPreviewDisplay(mHolder);
-			mCamera.startPreview();
-			mCamera.setPreviewCallback(this);
-			mCamera.getParameters().setPreviewSize(800, 480);
+			startSurface(holder);
 		} catch (Exception e) {
-			Log.d(TAG, "Error starting camera preview: " + e.getMessage());
+			e.printStackTrace();
 		}
 	}
 

@@ -149,7 +149,7 @@ public class MainActivity extends Activity {
         releaseCamera();
     }
 	
-	private void releaseCamera(){
+	private void releaseCamera() {
         if (mCamera != null){
             mCamera.release();
             mCamera = null;
